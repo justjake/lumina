@@ -9,13 +9,29 @@ module Lumina
     set_brightness_f(brightness)
   end
 
-  def self.set_brightness_f(brightness)
+  def f_to_brightness(f)
+    range = ::Hue::Light::BRIGHTNESS_RANGE
+    magnitude = range.end - range.begin
+    brightness = range.begin + (magnitude * f).floor
+    brightness.to_i
+  end
+
+  def brightness_to_f(brightness)
+    range = ::Hue::Light::BRIGHTNESS_RANGE
+    magnitude = range.end - range.begin
+    (brightness - range.begin).to_f / magnitude.to_f
+  end
+
+  def self.set_brightness_f(f)
     client = Hue::Client.new
     group = client.groups.first
 
-    derp = (255 * brightness).floor
+    # "derp" is the birghtness as an 8-bit float, it seems
+    derp = f_to_brightness(f)
+    prev_derp = group.brightness
+    prev_f = brightness_to_f(prev_derp)
 
-    puts "setting brigtness of #{group}: #{group.brightness} => #{derp} (from #{brightness})"
+    puts "setting brigtness of #{group}: #{prev_f} (#{prev_derp}) => #{f} (#{derp})"
 
     group.set_state(:brightness => derp)
   end
