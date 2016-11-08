@@ -3,8 +3,8 @@ require "lumina/version"
 require 'hue'
 require 'pry'
 
-module Lumina
-  def self.main
+class Lumina
+  def main
     brightness = ARGV[0].to_f
     set_brightness_f(brightness)
   end
@@ -22,7 +22,7 @@ module Lumina
     (brightness - range.begin).to_f / magnitude.to_f
   end
 
-  def self.set_brightness_f(f)
+  def set_brightness_f(f)
     client = Hue::Client.new
     group = client.groups.first
 

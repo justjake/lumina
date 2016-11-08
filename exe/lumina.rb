@@ -1,4 +1,4 @@
 #!/bin/ruby
 
 require 'lumina'
-Lumina.main
+Lumina.new.main
